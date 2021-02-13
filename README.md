@@ -242,11 +242,11 @@ First install `dotenv`:
 npm install dotenv
 ```
 
-Then create a new file named `.env` at the root of the project. We can set the variable we need like this:
-
+Then create a new file named `.env` at the root of the project. We can set the variable we need like this: 
 ```sh
 DATABASE_URL=postgres://myuser:mypassword@localhost:5432/learn_node_postgres
 ```
+> **no need for semi colon at then of the line**
 
 Then we can tell `dotenv` to load all environment variables at the top of our `connection.js` file:
 
