@@ -4,7 +4,7 @@ const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: false }))
 app.use(router)
 
 app.listen(PORT, () => {
