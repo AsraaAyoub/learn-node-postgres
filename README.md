@@ -1,6 +1,6 @@
 # Learn Postgres with Node
 
-This workshop covers how to connect your Node server to a Postgres database using the [`node-postgres`](https://node-postgres.com/) library.
+This workshop covers how to connect your Express server to a Postgres database using the [`node-postgres`](https://node-postgres.com/) library.
 
 ## Setup
 
@@ -157,7 +157,7 @@ You should see the `users` and `blog_posts` tables listed.
 
 ## Connecting to your database
 
-We need to tell our Node server how to send requests to our database. [`node-postgres`](https://node-postgres.com/) is a library for connecting to and querying a PostgreSQL database.
+We need to tell our server how to send requests to our database. [`node-postgres`](https://node-postgres.com/) is a library for connecting to and querying a PostgreSQL database.
 
 ```sh
 npm install pg
@@ -221,7 +221,9 @@ const connectionString =
 
 const db = new pg.Pool({ connectionString });
 
-db.query("SELECT * FROM USERS").then((result) => console.log(result));
+db.query("SELECT * FROM USERS").then((result) => console.log(result.rows));
+> `console.log(result)` would give you the response from the database
+> console.log(result.rows) would give you the data itself that we requested in the query
 
 module.exports = db;
 ```
@@ -242,10 +244,12 @@ First install `dotenv`:
 npm install dotenv
 ```
 
-Then create a new file named `.env` at the root of the project. We can set the variable we need like this: 
+Then create a new file named `.env` at the root of the project. We can set the variable we need like this:
+
 ```sh
 DATABASE_URL=postgres://myuser:mypassword@localhost:5432/learn_node_postgres
 ```
+
 > **no need for semi colon at then of the line**
 
 Then we can tell `dotenv` to load all environment variables at the top of our `connection.js` file:
@@ -274,12 +278,11 @@ Open `workshop/handlers.js` and add a query to the `home` function:
 ```js
 const db = require("./database/connection");
 
-function home(request, response) {
+function home(req, res) {
   db.query("SELECT * FROM users").then((result) => {
-    console.log(result);
+    console.log(result.rows);
   });
-  response.writeHead(200, { "content-type": "text/html" });
-  response.end("<h1>Hello world</h1>");
+  res.status(200).send(`<h1>Hello world</h1>`);
 }
 ```
 
@@ -306,9 +309,8 @@ function home(request, response) {
     const users = result.rows;
     // create a list item for each user in the array
     const userList = users.map((user) => `<li>${user.username}</li>`);
-    response.writeHead(200, { "content-type": "text/html" });
     // use .join to turn the array into a string
-    response.end(`<ul>${userList.join("")}</ul>`);
+    res.status(200).send(`<ul>${userList.join("")}</ul>`);
   });
 }
 ```

@@ -4,7 +4,7 @@ const handlers = require("./handlers");
 
 router.get('/', handlers.home)
 router.get('/new-user', handlers.newUser)
-router.post('/createUser', handlers.createUser)
+router.post('/create-user', handlers.createUser)
 router.get('/all-posts', handlers.rejection)
 router.use((req, res) => {
   res.status(404).send(`<h1>Not found</h1>`)
